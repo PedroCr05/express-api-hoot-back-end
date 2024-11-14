@@ -37,7 +37,7 @@ router.get(`/:hootId`, async (req, res) => {
     const hoot = await Hoot.findById(req.params.hootId).populate(`author`);
     if (!hoot) {
       res.status(404);
-      throw new Error(`Hoot has not been found.`);
+      throw new Error(`Error | Hoot does not exist. Please try again.`);
     }
     res.status(200).json(hoot);
   } catch (error) {
@@ -48,9 +48,13 @@ router.get(`/:hootId`, async (req, res) => {
 router.put(`/:hootId`, async (req, res) => {
   try {
     const hoot = await Hoot.findById(req.params.hootId);
+    if (!hoot) {
+      res.status(404);
+      throw new Error(`Error | Hoot does not exist. Please try again.`);
+    }
 
     if (!hoot.author.equals(req.user._id)) {
-      return res.status(403).json("Hey, you're not allowed here!");
+      return res.status(403).json(`Hey, you aren't allowed here!`);
     }
 
     const updatedHoot = await Hoot.findByIdAndUpdate(
@@ -61,6 +65,29 @@ router.put(`/:hootId`, async (req, res) => {
 
     updatedHoot._doc.author = req.user;
     res.status(200).json(updatedHoot);
+  } catch (error) {
+    res.status(500).json(`Invalid ID. Please make sure your ID is correct.`);
+  }
+});
+
+router.delete(`/:hootId`, async (req, res) => {
+  try {
+    const hoot = await Hoot.findById(req.params.hootId);
+    if (!hoot) {
+      res.status(404);
+      throw new Error(`Error | Hoot does not exist. Please try again.`);
+    }
+
+    if (!hoot.author.equals(req.user._id)) {
+      return res.status(403).json(`Hey, you aren't allowed here!`);
+    }
+
+    const deletedHoot = await Hoot.findByIdAndDelete(
+      req.params.hootId,
+      req.body,
+      { new: true }
+    );
+    res.status(200).json(deletedHoot);
   } catch (error) {
     res.status(500).json(`Invalid ID. Please make sure your ID is correct.`);
   }
