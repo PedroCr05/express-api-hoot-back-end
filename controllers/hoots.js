@@ -22,9 +22,26 @@ router.get(`/`, async (req, res) => {
     const hoots = await Hoot.find({})
       .populate(`author`)
       .sort({ createdAt: `desc` });
+    if (!hoots) {
+      res.status(404);
+      throw new Error(`Hoots have not been found.`);
+    }
     res.status(200).json(hoots);
   } catch (error) {
     res.status(500).json(error);
+  }
+});
+
+router.get(`/:hootId`, async (req, res) => {
+  try {
+    const hoot = await Hoot.findById(req.params.hootId).populate(`author`);
+    if (!hoot) {
+      res.status(404);
+      throw new Error(`Hoot has not been found.`);
+    }
+    res.status(200).json(hoot);
+  } catch (error) {
+    res.status(500).json(`Invalid ID. Please try again.`);
   }
 });
 
