@@ -93,4 +93,20 @@ router.delete(`/:hootId`, async (req, res) => {
   }
 });
 
+router.post(`/:hootId/comments`, async (req, res) => {
+  try {
+    req.body.author = req.user._id;
+    const hoot = await Hoot.findById(req.params.hootId);
+    hoot.comments.push(req.body);
+    await hoot.save();
+
+    // Why are we doing a minus one here? or I suppose hyphen 1?
+    const newComment = hoot.comments[hoot.comments.length - 1];
+
+    res.status(201).json(newComment);
+  } catch (error) {
+    res.status(500).json(error);
+  }
+});
+
 module.exports = router;
