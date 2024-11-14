@@ -15,7 +15,7 @@
 
 | HTTP Method | Controller    | Response | URI                     | Use Case          |
 | ----------- | ------------- | -------- | ----------------------- | ----------------- |
-| POST        | create        | 200      | /hoots                  | Create a hoot     |
+| POST        | create        | 201      | /hoots                  | Create a hoot     |
 | GET         | index         | 200      | /hoots                  | List hoots        |
 | GET         | show          | 200      | /hoots/:hootId          | Get a single hoot |
 | PUT         | update        | 200      | /hoots/:hootId          | Update a hoot     |
