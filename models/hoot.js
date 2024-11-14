@@ -1,5 +1,4 @@
 const mongoose = require(`mongoose`);
-const stringArr = ["News", "Sports", "Games", "Movies", "Music", "Television"];
 
 const commentSchema = new mongoose.Schema(
   {
@@ -25,7 +24,7 @@ const HootSchema = new mongoose.Schema(
     category: {
       type: String,
       required: true,
-      enum: stringArr,
+      enum: ["News", "Sports", "Games", "Movies", "Music", "Television"],
     },
     author: { type: mongoose.Schema.Types.ObjectId, ref: `User` },
     comments: [commentSchema],
