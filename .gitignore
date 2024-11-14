@@ -1,2 +1,6 @@
+# Packages
 node_modules
+package-lock.json
+
+# Super Secret Files
 .env
