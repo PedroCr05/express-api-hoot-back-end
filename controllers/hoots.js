@@ -41,7 +41,28 @@ router.get(`/:hootId`, async (req, res) => {
     }
     res.status(200).json(hoot);
   } catch (error) {
-    res.status(500).json(`Invalid ID. Please try again.`);
+    res.status(500).json(`Could not find the inputted ID. Please try again.`);
+  }
+});
+
+router.put(`/:hootId`, async (req, res) => {
+  try {
+    const hoot = await Hoot.findById(req.params.hootId);
+
+    if (!hoot.author.equals(req.user._id)) {
+      return res.status(403).json("Hey, you're not allowed here!");
+    }
+
+    const updatedHoot = await Hoot.findByIdAndUpdate(
+      req.params.hootId,
+      req.body,
+      { new: true }
+    );
+
+    updatedHoot._doc.author = req.user;
+    res.status(200).json(updatedHoot);
+  } catch (error) {
+    res.status(500).json(`Invalid ID. Please make sure your ID is correct.`);
   }
 });
 
